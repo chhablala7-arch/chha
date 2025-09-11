@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festival Share</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    img {
+      max-width: 100%;
+      border: 3px solid #f39c12;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    .details {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      font-family: 'Dancing Script', cursive;
+      color: #e67e22;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    p {
+      font-size: 18px;
+      color: #444;
+      margin: 8px 0;
+    }
+    input {
+      padding:10px;
+      border-radius:8px;
+      border:2px solid #ff9800;
+      width:80%;
+      max-width:300px;
+      font-family: 'Baloo 2', cursive;
+      font-size:16px;
+    }
+    .button-container {
+      margin-top: 15px;
+    }
+    .share-button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-family: 'Baloo 2', cursive;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      margin: 5px;
+    }
+    .share-button:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+      transition: 0.2s;
+    }
+    .whatsapp-btn { background: #25D366; }
+    .facebook-btn { background: #1877F2; }
+    .twitter-btn { background: #1DA1F2; }
+    .telegram-btn { background: #0088CC; }
+    
+    a {
+      color: #0066cc;
+      text-decoration: underline;
+    }
+
+    /* 🎆 Disco Light Effect */
+    .disco {
+      position: absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events: none;
+      z-index: 0;
+      background: repeating-radial-gradient(circle,
+        rgba(255,0,0,0.2) 0, rgba(0,255,0,0.2) 10%,
+        rgba(0,0,255,0.2) 20%, rgba(255,255,0,0.2) 30%);
+      animation: disco 3s linear infinite;
+    }
+    @keyframes disco {
+      0% {filter: hue-rotate(0deg);}
+      100% {filter: hue-rotate(360deg);}
+    }
+
+    /* 🎇 Fireworks (simple stars) */
+    .firework {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      background: #ff0;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+    @keyframes explode {
+      from {transform: scale(1);}
+      to {transform: scale(20); opacity: 0;}
+    }
+  </style>
+</head>
+<body>
+  <div class="disco"></div>
+
+  <h2>🎉 Festival Greeting 🎉</h2>
+  <img src="https://i.postimg.cc/RFb0rVnV/Lakshmi.jpg" alt="Festival Image">
+
+  <div class="details">
+    <h2>✨ शुभ दीपावली ✨</h2>
+    <p>आपके जीवन में खुशियाँ और समृद्धि आए।</p>
+    <p>🎇 Happy Diwali 2025 🎇</p>
+    <p id="sender"></p>
+  </div>
+
+  <input type="text" id="username" placeholder="अपना नाम लिखें">
+  <div class="button-container">
+    <button class="share-button whatsapp-btn" onclick="share('whatsapp')">WhatsApp पर शेयर करें</button>
+    <button class="share-button facebook-btn" onclick="share('facebook')">Facebook पर शेयर करें</button>
+    <button class="share-button twitter-btn" onclick="share('twitter')">Twitter पर शेयर करें</button>
+    <button class="share-button telegram-btn" onclick="share('telegram')">Telegram पर शेयर करें</button>
+  </div>
+
+  <script>
+    // Firework generator
+    setInterval(() => {
+      let fw = document.createElement("div");
+      fw.className = "firework";
+      fw.style.top = Math.random()*window.innerHeight + "px";
+      fw.style.left = Math.random()*window.innerWidth + "px";
+      document.body.appendChild(fw);
+      setTimeout(()=>fw.remove(),1000);
+    }, 500);
+
+    // URL से नाम पढ़ना
+    const urlParams = new URLSearchParams(window.location.search);
+    const senderName = urlParams.get("name");
+    if (senderName) {
+      document.getElementById("sender").innerText = "शुभकामनाएं भेजने वाले: " + senderName;
+    }
+
+    function share(platform) {
+      let username = document.getElementById("username").value.trim();
+      if (!username) {
+        alert("कृपया अपना नाम लिखें!");
+        return;
+      }
+      
+      document.getElementById("sender").innerText = "शुभकामनाएं भेजने वाले: " + username;
+
+      let link = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(username);
+      let imgLink = "https://i.postimg.cc/RFb0rVnV/Lakshmi.jpg";
+      let msg = `✨ शुभ दीपावली ✨\nआपके जीवन में खुशियाँ और समृद्धि आए।\n🎇 Happy Diwali 2025 🎇\n\nशुभकामनाएं भेजने वाले: ${username}\n\nइस लिंक को आगे शेयर करें 👇\n${link}`;
+
+      let shareLink;
+      switch (platform) {
+        case 'whatsapp':
+          shareLink = "https://wa.me/?text=" + encodeURIComponent(msg);
+          break;
+        case 'facebook':
+          // Facebook share के लिए URL का उपयोग होता है
+          shareLink = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link);
+          break;
+        case 'twitter':
+          shareLink = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(msg);
+          break;
+        case 'telegram':
+          shareLink = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(msg);
+          break;
+        default:
+          return;
+      }
+      window.open(shareLink, "_blank");
+    }
+  </script>
+
+  <script type="text/javascript" src="https://www.revenuecpmgate.com/ur1tgu0m?key=4c87e41f2511d8170e912df84792f003"></script>
+
+</body>
+</html>
