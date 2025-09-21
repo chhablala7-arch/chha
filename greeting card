@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeting Card</title>
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="🌸 Greeting Card 🌸">
+  <meta property="og:description" content="आपका Greeting Card यहां देखें 👇">
+  <meta property="og:image" content="https://i.postimg.cc/2qtHSMVG/greeting.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourdomain.com/index.html">
+
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding: 15px;
+      display: inline-block;
+    }
+    .card img {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 10px;
+    }
+    .name {
+      font-size: 20px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    input {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #20b858;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Greeting Photo -->
+    <img id="greetImg" src="https://i.postimg.cc/2qtHSMVG/greeting.jpg" alt="Greeting Card">
+    
+    <!-- Name will show here -->
+    <div id="showName" class="name"></div>
+    
+    <!-- Input box -->
+    <input type="text" id="nameInput" placeholder="अपना नाम लिखें" oninput="updateName()">
+    
+    <!-- WhatsApp Share Button -->
+    <button onclick="shareOnWhatsApp()">📤 WhatsApp पर शेयर करें</button>
+  </div>
+
+  <script>
+    // URL से नाम निकालना
+    function getQueryParam(param) {
+      let urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // पेज लोड होने पर URL से नाम दिखाना
+    window.onload = function() {
+      let nameFromURL = getQueryParam("name");
+      if(nameFromURL){
+        document.getElementById("showName").innerText = decodeURIComponent(nameFromURL);
+      }
+    }
+
+    // इनपुट से नाम अपडेट करना
+    function updateName() {
+      let name = document.getElementById("nameInput").value;
+      document.getElementById("showName").innerText = name;
+    }
+
+    // WhatsApp शेयर
+    function shareOnWhatsApp() {
+      let name = document.getElementById("nameInput").value || "आपका नाम";
+      let baseUrl = window.location.origin + window.location.pathname;
+      let shareUrl = baseUrl + "?name=" + encodeURIComponent(name);
+
+      let message = "🌸 Greeting Card 🌸%0A👇 आपका कार्ड 👇%0A" + shareUrl;
+      let url = "https://wa.me/?text=" + message;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
