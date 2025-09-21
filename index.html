@@ -3,111 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>फोटो + लिंक ओपनर</title>
+  <title>Greeting Card</title>
   <style>
     body {
       text-align: center;
       font-family: Arial, sans-serif;
-      margin-top: 30px;
+      background: #f8f9fa;
+      padding: 20px;
     }
-    img {
-      cursor: pointer;
-      border: 3px solid #444;
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding: 15px;
+      display: inline-block;
+    }
+    .card img {
+      width: 100%;
+      max-width: 350px;
       border-radius: 10px;
-      margin-top: 20px;
-      max-width: 90%;
+    }
+    .name {
+      font-size: 20px;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #2c3e50;
     }
     input {
-      padding: 8px;
-      width: 80%;
-      max-width: 400px;
-      margin-top: 10px;
-      border: 2px solid #444;
-      border-radius: 8px;
+      margin-top: 15px;
+      padding: 10px;
       font-size: 16px;
+      width: 80%;
+      max-width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
     }
     button {
       margin-top: 15px;
       padding: 10px 20px;
-      font-size: 16px;
+      background: #25D366;
+      color: white;
       border: none;
       border-radius: 8px;
-      background: #4CAF50;
-      color: white;
+      font-size: 16px;
       cursor: pointer;
     }
     button:hover {
-      background: #45a049;
+      background: #20b858;
     }
-    p {
-      margin-top: 10px;
-      color: #555;
+    .admin-panel {
+      margin-top: 20px;
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="card">
+    <!-- Greeting Photo -->
+    <img id="greetImg" src="https://i.postimg.cc/2qtHSMVG/greeting.gif" alt="Greeting Card">
+    
+    <!-- Name will show here -->
+    <div id="showName" class="name"></div>
+    
+    <!-- Input box -->
+    <input type="text" id="nameInput" placeholder="अपना नाम लिखें" oninput="updateName()">
+    
+    <!-- WhatsApp Share Button -->
+    <button onclick="shareOnWhatsApp()">📤 WhatsApp पर शेयर करें</button>
+  </div>
 
-  <h2>👉 अपनी फोटो चुनें और लिंक डालें</h2>
+  <!-- सिर्फ एडमिन के लिए -->
+  <div style="margin-top:25px;">
+    <input type="password" id="adminPass" placeholder="Admin पासवर्ड डालें">
+    <button onclick="checkAdmin()">🔑 लॉगिन</button>
+  </div>
 
-  <!-- फोटो चुनने का ऑप्शन -->
-  <input type="file" accept="image/*" onchange="loadPhoto(event)">
-  <br>
-
-  <!-- लिंक डालने का ऑप्शन -->
-  <input type="text" id="userLink" placeholder="यहाँ अपना लिंक डालें (जैसे https://www.google.com)">
-  
-  <p>ऊपर लिंक डालें और फिर फोटो पर क्लिक करें 👇</p>
-
-  <!-- चुनी गई फोटो -->
-  <img id="myPhoto" src="" alt="आपकी फोटो यहाँ दिखेगी" style="display:none;" onclick="openMyLink()">
-
-  <!-- शेयर बटन -->
-  <br>
-  <button onclick="sharePhoto()">📤 शेयर करें</button>
+  <div class="admin-panel" id="adminPanel">
+    <h3>🛠 एडमिन पैनल</h3>
+    <input type="file" id="imgUpload" accept="image/*" onchange="changePhoto(event)">
+  </div>
 
   <script>
-    let selectedFile; 
-    let hiddenLink = ""; 
-
-    function loadPhoto(event) {
-      selectedFile = event.target.files[0];
-      let img = document.getElementById("myPhoto");
-      img.src = URL.createObjectURL(selectedFile);
-      img.style.display = "block";
+    // URL से नाम निकालना
+    function getQueryParam(param) {
+      let urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
     }
 
-    function openMyLink() {
-      let link = document.getElementById("userLink").value || hiddenLink;
-      if(link) {
-        window.open(link, "_blank");
+    // पेज लोड होने पर URL से नाम दिखाना
+    window.onload = function() {
+      let nameFromURL = getQueryParam("name");
+      if(nameFromURL){
+        document.getElementById("showName").innerText = decodeURIComponent(nameFromURL);
+      }
+    }
+
+    // इनपुट से नाम अपडेट करना
+    function updateName() {
+      let name = document.getElementById("nameInput").value;
+      document.getElementById("showName").innerText = name;
+    }
+
+    // WhatsApp शेयर
+    function shareOnWhatsApp() {
+      let name = document.getElementById("nameInput").value || "आपका नाम";
+      let baseUrl = window.location.origin + window.location.pathname;
+      let shareUrl = baseUrl + "?name=" + encodeURIComponent(name);
+
+      let message = "🌸 Greeting Card 🌸%0A👇 आपका कार्ड 👇%0A" + shareUrl;
+      let url = "https://wa.me/?text=" + message;
+      window.open(url, "_blank");
+    }
+
+    // एडमिन चेक
+    function checkAdmin() {
+      let pass = document.getElementById("adminPass").value;
+      if(pass === "1234"){
+        document.getElementById("adminPanel").style.display = "block";
+        alert("✅ Admin लॉगिन सफल");
       } else {
-        alert("पहले कोई लिंक डालें!");
+        alert("❌ गलत पासवर्ड");
       }
     }
 
-    async function sharePhoto() {
-      hiddenLink = document.getElementById("userLink").value;
-
-      if (!selectedFile) {
-        alert("पहले कोई फोटो चुनें!");
-        return;
-      }
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "मेरी फोटो",
-            text: "यह फोटो देखें: " + (hiddenLink || "कोई लिंक नहीं"),
-            url: hiddenLink || ""
-          });
-        } catch (err) {
-          console.log("शेयर रद्द किया गया या समस्या:", err);
+    // फोटो बदलना (सिर्फ एडमिन के लिए)
+    function changePhoto(event) {
+      let file = event.target.files[0];
+      if(file){
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("greetImg").src = e.target.result;
         }
-      } else {
-        alert("आपका ब्राउज़र शेयर सपोर्ट नहीं करता।");
+        reader.readAsDataURL(file);
       }
     }
   </script>
-
 </body>
 </html>
