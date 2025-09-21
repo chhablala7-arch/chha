@@ -8,7 +8,7 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="🌸 Greeting Card 🌸">
   <meta property="og:description" content="आपका Greeting Card यहां देखें 👇">
-  <meta property="og:image" content="https://i.postimg.cc/2qtHSMVG/greeting.jpg">
+  <meta property="og:image" content="https://i.postimg.cc/2qtHSMVG/greeting.gif">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://yourdomain.com/index.html">
 
@@ -65,7 +65,7 @@
 <body>
   <div class="card">
     <!-- Greeting Photo -->
-    <img id="greetImg" src="https://i.postimg.cc/2qtHSMVG/greeting.jpg" alt="Greeting Card">
+    <img id="greetImg" src="https://i.postimg.cc/2qtHSMVG/greeting.gif" alt="Greeting Card">
     
     <!-- Name will show here -->
     <div id="showName" class="name"></div>
